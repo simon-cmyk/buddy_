@@ -1,0 +1,1 @@
+# basic-pyside2-application
