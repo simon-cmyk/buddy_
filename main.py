@@ -2,7 +2,7 @@ from PySide2 import QtWidgets
 import sys
 from mainwindow import MainWindow
 from PySide2.QtCore import Slot,Qt
-from PySide2.QtGui import QPalette, QColor
+from PySide2.QtGui import QPalette, QColor, QIcon
 
 # Dark Palette (found on github, couldn't track the original author)
 default_palette = QPalette()
@@ -24,8 +24,14 @@ dark_palette.setColor(QPalette.HighlightedText, Qt.black)
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
     app.setPalette(dark_palette)
+    app.setWindowIcon(QIcon("20210522_110856.jpg"))
     widget = MainWindow()
-    widget.resize(1300, 800)
+    widget.setWindowTitle("Din egen buddy_")
+    widget.resize(800, 400)
     widget.show()
+
+    with open("style.qss", "r") as f:
+        _style = f.read()
+        app.setStyleSheet(_style)
 
     sys.exit(app.exec_())

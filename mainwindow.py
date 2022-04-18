@@ -1,58 +1,37 @@
 import sys
 
 from PySide2 import QtCore
+from PySide2.QtGui import QFont
 from PySide2.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QVBoxLayout, QWidget, QPushButton, \
-    QProgressBar, QScrollBar, QSlider
+    QProgressBar, QScrollBar, QSlider, QGroupBox, QHBoxLayout
 
 from daily_input import daily_input
+from targetwindow import targetWindow
 
 
-class MainWindow(QMainWindow):
+class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
+        self.groupBox = None
+        self.buttons = list()
+        self.createLayout()
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.groupBox)
+        self.setLayout(vbox)
 
-        self.setWindowTitle("Din egen Buddy_")
-        instruction_lab = QLabel("Legg til korsan dagen er (eit håp, ein frykt og ein generell kommentar :)")
-        hope_lab = QLabel("Håpet:")
-        fear_lab = QLabel("Frykta:")
-        general_lab = QLabel("Generelt:")
+    def createLayout(self):
+        self.groupBox = QGroupBox("Log prestasjon/sett mål/reflekter på ting")
+        self.groupBox.setFont(QFont("Sanserif", 13))
 
-        self.input_hope = QLineEdit()
-        self.input_fear = QLineEdit()
-        self.input_general = QLineEdit()
-        self.input_hope.textChanged[str].connect(lambda text: self.input_hope.setText(text))
-        self.input_fear.textChanged[str].connect(lambda text: self.input_fear.setText(text))
-        self.input_general.textChanged[str].connect(lambda text: self.input_general.setText(text))
+        hbox = QHBoxLayout()
 
-        self.rating_lab = QLabel()
-        self.rating = QSlider()
-        self.rating.setOrientation(QtCore.Qt.Horizontal)
-        self.rating.setMaximum(100)
-        self.rating.setMinimum(0)
-        self.rating.valueChanged.connect(self.changeSlider)
-        daily_input_done = QPushButton("Submit how you feel today: (leave blank to skip)")
-        daily_input_done.clicked.connect(self.submit_daily_input)
-        self.rating_lab.setText("slider verdi: " + str(self.rating.value()))
+        button = QPushButton("Nytt Target", self)
+        button.setMinimumHeight(40)
+        self.buttons.append(button)
+        hbox.addWidget(button)
+        self.groupBox.setLayout(hbox)
+        button.pressed.connect(self.newTarget)
 
-        layout = QVBoxLayout()
-        layout.addWidget(instruction_lab)
-        layout.addWidget(hope_lab)
-        layout.addWidget(self.input_hope)
-        layout.addWidget(fear_lab)
-        layout.addWidget(self.input_fear)
-        layout.addWidget(general_lab)
-        layout.addWidget(self.input_general)
-        layout.addWidget(self.rating_lab)
-        layout.addWidget(self.rating)
-        layout.addWidget(daily_input_done)
-
-        container = QWidget()
-        container.setLayout(layout)
-
-        self.setCentralWidget(container)
-
-    def submit_daily_input(self):
-        daily_input(self.input_hope.text(), self.input_fear.text(), self.input_general.text(), self.rating.value())
-
-    def changeSlider(self, value):
-        self.rating_lab.setText("slider verdi: " + str(value))
+        self.show()
+    def newTarget(self):
+        target = targetWindow()
