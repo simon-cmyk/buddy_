@@ -1,7 +1,10 @@
+from datetime import datetime
+
 from PySide2 import QtCore
 from PySide2.QtGui import QWindow
 from PySide2.QtWidgets import QWidget, QVBoxLayout, QPushButton, QSlider, QLabel, QLineEdit, QStyle
 from PySide2.QtCore import Slot,Qt
+from ruamel import yaml
 
 from daily_input import daily_input
 
@@ -50,7 +53,16 @@ class targetWindow(QWindow):
 
 
     def submit_daily_input(self):
-        daily_input(self.input_hope.text(), self.input_fear.text(), self.input_general.text(), self.rating.value())
+        # Code to simplify dumpfile. Avoid references/pointers in yaml-file.
+        yaml.Dumper.ignore_aliases = lambda *args: True
+        input_to_be_submitted = daily_input(self.input_hope.text(), self.input_fear.text(), self.input_general.text(), self.rating.value())
+        with open("logfile.yaml") as file:
+            file_content = yaml.load(file)
+            file_content["daily_inputs"][str(datetime.now())] = input_to_be_submitted
+        with open("logfile.yaml", 'w+') as file:
+            yaml.dump(file_content, file, default_flow_style=False)
+
+
 
 
     def changeSlider(self, value):

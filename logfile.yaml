@@ -1,0 +1,13 @@
+daily_inputs:
+  '2022-06-11 15:32:02.262272': !!python/object:daily_input.daily_input
+    filename: daily_input.yaml
+    how_often_check: 1000000
+    init_date: 2022-06-11 15:32:02.259310
+    notes:
+      2022-06-11 15:32:02.259310: !!python/tuple
+      - !!python/tuple
+        - "\xC5 f\xE5 pizza"
+        - "ikkje f\xE5 pizza"
+        - "ikkje s\xE5 mykje meir"
+      - 75
+    reason: fun for the future
